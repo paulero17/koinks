@@ -81,7 +81,7 @@ function update() {
 
 // Control de salto
 window.addEventListener('keydown', (e) => {
-    if (e.code === 'Space' && pig.y === 25) {
+    if (e.code === 'Space' && pig.y === 250) {
         pig.dy = -15; // Inicializa el salto
         isJumping = true;
     }
