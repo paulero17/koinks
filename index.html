@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Chanchito Saltarín</title>
-  <style>
-    /* Estilos para el canvas */
-    canvas {
-      border: 1px solid black;
-    }
-  </style>
+    <title>Juego del Chanchito</title>
+    <style>
+        body {
+            text-align: center;
+        }
+        #game {
+            width: 400px;
+            height: 300px;
+            border: 1px solid black;
+            position: relative;
+        }
+        #chanchito, #moneda {
+            position: absolute;
+        }
+    </style>
 </head>
 <body>
-  <canvas id="canvas" width="400" height="600"></canvas>
-  <script src="juego.js"></script>
+    <div id="game">
+        <img id="chanchito" src="img/chanchito.png" alt="Chanchito">
+        <img id="moneda" src="img/moneda.png" alt="Moneda">
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
