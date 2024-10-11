@@ -9,15 +9,15 @@ let isJumping = false;
 
 // Generar una nueva moneda en una posición aleatoria
 function spawnCoin() {
-    const x = Math.random() * (canvas.width - 20);
-    coins.push({ x: x, y: 0, width: 20, height: 20 });
+    const y = Math.random() * (canvas.height - 20); // Posición Vertical Aleatoria
+    coins.push({ x: canvas.width, y: y, width: 20, height: 20 });
 }
 
 // Actualizar la posición de las monedas
 function updateCoins() {
     for (let i = 0; i < coins.length; i++) {
-        coins[i].y += 2; // Velocidad de caída
-        if (coins[i].y > canvas.height) {
+        coins[i].x -= 2; // Velocidad de movimiento hacia la izquierda
+        if (coins[i].x < 0) {
             coins.splice(i, 1); // Eliminar moneda si sale de pantalla
             i--;
         }
