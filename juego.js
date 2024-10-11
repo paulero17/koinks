@@ -15,16 +15,21 @@ function init() {
     y: canvas.height - 50,
     ancho: 30,
     alto: 30,
-    velocidadX: 0,
+    velocidadX: velocidad,
     velocidadY: 0
   };
-  monedas.push({
-    x: Math.random() * (canvas.width - 20),
-    y: Math.random() * (canvas.height - 20),
-    ancho: 10,
-    alto: 10
-  });
+  
   intervalo = setInterval(actualizar, 1000 / 60);
+  
+  // Genera monedas aleatorias
+  setInterval(function() {
+    monedas.push({
+      x: canvas.width,
+      y: Math.random() * (canvas.height - 20),
+      ancho: 10,
+      alto: 10
+    });
+  }, 1000);
 }
 
 // Actualiza el juego
@@ -49,6 +54,9 @@ function actualizar() {
     ctx.fillStyle = 'gold';
     ctx.fillRect(monedas[i].x, monedas[i].y, monedas[i].ancho, monedas[i].alto);
     
+    // Mueve las monedas
+    monedas[i].x -= velocidad;
+    
     // Comprueba si el chanchito ha recogido la moneda
     if (chanchito.x + chanchito.ancho > monedas[i].x &&
         chanchito.x < monedas[i].x + monedas[i].ancho &&
@@ -56,12 +64,11 @@ function actualizar() {
         chanchito.y < monedas[i].y + monedas[i].alto) {
       puntos++;
       monedas.splice(i, 1);
-      monedas.push({
-        x: Math.random() * (canvas.width - 20),
-        y: Math.random() * (canvas.height - 20),
-        ancho: 10,
-        alto: 10
-      });
+    }
+    
+    // Elimina monedas fuera de la pantalla
+    if (monedas[i].x < 0) {
+      monedas.splice(i, 1);
     }
   }
   
@@ -80,4 +87,5 @@ document.addEventListener('keydown', function(event) {
   }
 });
 
-init();
+// Llama a la función init cuando el documento esté listo
+document.addEventListener('DOMContentLoaded', init);
