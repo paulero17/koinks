@@ -7,6 +7,13 @@ let salto = 20;
 let gravedad = 1;
 let velocidadChanchito = 2;
 
+// Carga las imágenes
+let imagenChanchito = new Image();
+imagenChanchito.src = 'chanchito.png';
+
+let imagenMoneda = new Image();
+imagenMoneda.src = 'moneda.png';
+
 // Inicializa el juego
 function init() {
   canvas = document.getElementById('canvas');
@@ -14,8 +21,8 @@ function init() {
   chanchito = {
     x: 50,
     y: canvas.height - 50,
-    ancho: 30,
-    alto: 30,
+    ancho: imagenChanchito.width,
+    alto: imagenChanchito.height,
     velocidadX: velocidadChanchito,
     velocidadY: 0
   };
@@ -26,9 +33,9 @@ function init() {
   setInterval(function() {
     monedas.push({
       x: canvas.width,
-      y: Math.random() * (canvas.height - 20),
-      ancho: 10,
-      alto: 10,
+      y: Math.random() * (canvas.height - imagenMoneda.height),
+      ancho: imagenMoneda.width,
+      alto: imagenMoneda.height,
       velocidadX: -velocidad
     });
   }, 1000);
@@ -48,13 +55,11 @@ function actualizar() {
   
   // Dibuja el chanchito
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = 'pink';
-  ctx.fillRect(chanchito.x, chanchito.y, chanchito.ancho, chanchito.alto);
+  ctx.drawImage(imagenChanchito, chanchito.x, chanchito.y);
   
   // Dibuja las monedas
   for (let i = 0; i < monedas.length; i++) {
-    ctx.fillStyle = 'gold';
-    ctx.fillRect(monedas[i].x, monedas[i].y, monedas[i].ancho, monedas[i].alto);
+    ctx.drawImage(imagenMoneda, monedas[i].x, monedas[i].y);
     
     // Mueve las monedas
     monedas[i].x += monedas[i].velocidadX;
