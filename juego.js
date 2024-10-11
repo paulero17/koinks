@@ -5,7 +5,7 @@ let puntos = 0;
 let velocidad = 6;
 let salto = 20;
 let gravedad = 1;
-let velocidadChanchito = -2; // Cambiado a negativo para mover hacia la izquierda
+let velocidadChanchito = -2;
 
 // Carga las imágenes
 let imagenChanchito = new Image();
@@ -26,9 +26,9 @@ function init() {
     velocidadX: velocidadChanchito,
     velocidadY: 0
   };
-  
+
   intervalo = setInterval(actualizar, 1000 / 60);
-  
+
   // Genera monedas aleatorias
   setInterval(function() {
     monedas.push({
@@ -47,31 +47,30 @@ function actualizar() {
   chanchito.x += chanchito.velocidadX;
   chanchito.y += chanchito.velocidadY;
   chanchito.velocidadY += gravedad;
-  
+
   // Salta el chanchito
   if (chanchito.y + chanchito.alto > canvas.height) {
     chanchito.velocidadY = -salto;
   }
-  
+
   // Evita que el chanchito se salga del canvas
   if (chanchito.x < 0) {
     chanchito.x = 0;
-  }
-  if (chanchito.x + chanchito.ancho > canvas.width) {
+  } else if (chanchito.x + chanchito.ancho > canvas.width) {
     chanchito.x = canvas.width - chanchito.ancho;
   }
-  
+
   // Dibuja el chanchito
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(imagenChanchito, chanchito.x, chanchito.y);
-  
+
   // Dibuja las monedas
   for (let i = 0; i < monedas.length; i++) {
     ctx.drawImage(imagenMoneda, monedas[i].x, monedas[i].y);
-    
+
     // Mueve las monedas
     monedas[i].x += monedas[i].velocidadX;
-    
+
     // Comprueba si el chanchito ha recogido la moneda
     if (chanchito.x + chanchito.ancho > monedas[i].x &&
         chanchito.x < monedas[i].x + monedas[i].ancho &&
@@ -80,13 +79,13 @@ function actualizar() {
       puntos++;
       monedas.splice(i, 1);
     }
-    
+
     // Elimina monedas fuera de la pantalla
     if (monedas[i].x < 0) {
       monedas.splice(i, 1);
     }
   }
-  
+
   // Muestra los puntos
   ctx.font = '24px Arial';
   ctx.fillStyle = 'black';
@@ -104,3 +103,10 @@ document.addEventListener('keydown', function(event) {
 
 // Llama a la función init cuando el documento esté listo
 document.addEventListener('DOMContentLoaded', init);
+
+// Asegúrate de que las imágenes estén cargadas antes de iniciar el juego
+imagenChanchito.onload = function() {
+  imagenMoneda.onload = function() {
+    init();
+  };
+};
