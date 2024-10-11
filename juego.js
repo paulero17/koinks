@@ -1,81 +1,92 @@
-// Obtener el elemento del juego
-const game = document.getElementById('game');
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
 
-// Dimensiones del juego (ajusta según tus necesidades)
-const gameWidth = 400;
-const gameHeight = 300;
+let pig = { x: 50, y: 250, width: 30, height: 30, dy: 0 };
+let coins = [];
+let score = 0;
+let gravity = 1;
+let isJumping = false;
 
-// Posiciones iniciales del jugador y la moneda (representados por divs)
-let playerX = 50;
-let playerY = gameHeight - 20;
-let coinX = gameWidth;
-let coinY = Math.random() * (gameHeight - 20);
-
-// Velocidades
-let playerSpeed = 5;
-let coinSpeed = 3;
-
-// Función para mover al jugador
-function movePlayer(e) {
-  if (e.keyCode === 32) { // Espacio para saltar
-    playerY -= 50;
-  } else {
-    playerY = gameHeight - 20; // Regresar al suelo
-  }
-  // En lugar de modificar un elemento img, podemos crear divs para representar al jugador y la moneda
-  const playerDiv = document.getElementById('player');
-  playerDiv.style.top = playerY + 'px';
+// Generar una nueva moneda en una posición aleatoria
+function spawnCoin() {
+    const x = Math.random() * (canvas.width - 20);
+    coins.push({ x: x, y: 0, width: 20, height: 20 });
 }
 
-// Función para mover la moneda
-function moveCoin() {
-  coinX -= coinSpeed;
-  if (coinX < 0) {
-    coinX = gameWidth;
-    coinY = Math.random() * (gameHeight - 20);
-  }
-  const coinDiv = document.getElementById('coin');
-  coinDiv.style.left = coinX + 'px';
-  coinDiv.style.top = coinY + 'px';
+// Actualizar la posición de las monedas
+function updateCoins() {
+    for (let i = 0; i < coins.length; i++) {
+        coins[i].y += 2; // Velocidad de caída
+        if (coins[i].y > canvas.height) {
+            coins.splice(i, 1); // Eliminar moneda si sale de pantalla
+            i--;
+        }
+    }
 }
 
-// Función para verificar colisiones
-function checkCollision() {
-  // Aquí puedes calcular la colisión basándote en las posiciones de los divs del jugador y la moneda
-  // Por ejemplo, puedes usar una biblioteca de detección de colisiones si lo prefieres
-  const playerDiv = document.getElementById('player');
-  const coinDiv = document.getElementById('coin');
-
-  // Lógica simplificada para comprobar si los rectángulos se superponen
-  if (
-    playerX + 20 > coinX && // 20 es el ancho y alto asumidos del jugador y la moneda
-    playerX < coinX + 20 &&
-    playerY + 20 > coinY &&
-    playerY < coinY + 20
-  ) {
-    console.log('¡Moneda recolectada!');
-    // Aquí puedes agregar lógica para sumar puntos, etc.
-    coinX = gameWidth;
-    coinY = Math.random() * (gameHeight - 20);
-  }
+// Detectar colisiones
+function detectCollisions() {
+    for (let i = 0; i < coins.length; i++) {
+        if (pig.x < coins[i].x + coins[i].width &&
+            pig.x + pig.width > coins[i].x &&
+            pig.y < coins[i].y + coins[i].height &&
+            pig.y + pig.height > coins[i].y) {
+            score++;
+            coins.splice(i, 1); // Eliminar moneda al recoger
+            i--;
+        }
+    }
 }
 
-// Crear los divs para el jugador y la moneda
-const playerDiv = document.createElement('div');
-playerDiv.id = 'player';
-playerDiv.style.width = '20px';
-playerDiv.style.height = '20px';
-playerDiv.style.backgroundColor = 'blue';
-game.appendChild(playerDiv);
+// Dibuja el chanchito y las monedas
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Dibujar chanchito
+    ctx.fillStyle = 'pink';
+    ctx.fillRect(pig.x, pig.y, pig.width, pig.height);
+    
+    // Dibujar monedas
+    ctx.fillStyle = 'gold';
+    for (let coin of coins) {
+        ctx.fillRect(coin.x, coin.y, coin.width, coin.height);
+    }
+    
+    // Dibujar puntaje
+    ctx.fillStyle = 'black';
+    ctx.fillText('Score: ' + score, 10, 10);
+}
 
-const coinDiv = document.createElement('div');
-coinDiv.id = 'coin';
-coinDiv.style.width = '20px';
-coinDiv.style.height = '20px';
-coinDiv.style.backgroundColor = 'yellow';
-game.appendChild(coinDiv);
+// Actualizar el estado del juego
+function update() {
+    if (isJumping) {
+        pig.dy += gravity;
+        pig.y += pig.dy;
 
-// Manejadores de eventos
-document.addEventListener('keydown', movePlayer);
-setInterval(moveCoin, 20);
-setInterval(checkCollision, 20);
+        if (pig.y >= 250) {
+            pig.y = 250;
+            pig.dy = 0;
+            isJumping = false;
+        }
+    }
+    
+    updateCoins();
+    detectCollisions();
+    draw();
+    
+    requestAnimationFrame(update);
+}
+
+// Control de salto
+window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' && pig.y === 250) {
+        pig.dy = -15; // Inicializa el salto
+        isJumping = true;
+    }
+});
+
+// Spawnear monedas cada 1 segundo
+setInterval(spawnCoin, 1000);
+
+// Iniciar el juego
+update();
