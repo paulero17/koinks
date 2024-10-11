@@ -1,7 +1,6 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-
 let pig = { x: 50, y: 250, width: 30, height: 30, dy: 0 };
 let coins = [];
 let score = 0;
