@@ -15,7 +15,7 @@ function init() {
     y: canvas.height - 50,
     ancho: 30,
     alto: 30,
-    velocidadX: velocidad,
+    velocidadX: 0,
     velocidadY: 0
   };
   
