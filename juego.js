@@ -6,7 +6,7 @@ let velocidad = 6;
 let salto = 20;
 let gravedad = 1;
 let velocidadChanchito = 2;
-
+ 
 // Inicializa el juego
 function init() {
   canvas = document.getElementById('canvas');
