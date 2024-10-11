@@ -5,7 +5,7 @@ let puntos = 0;
 let velocidad = 6;
 let salto = 20;
 let gravedad = 1;
-let velocidadChanchito = 2;
+let velocidadChanchito = -2; // Cambiado a negativo para mover hacia la izquierda
 
 // Carga las imágenes
 let imagenChanchito = new Image();
@@ -54,6 +54,9 @@ function actualizar() {
   }
   
   // Evita que el chanchito se salga del canvas
+  if (chanchito.x < 0) {
+    chanchito.x = 0;
+  }
   if (chanchito.x + chanchito.ancho > canvas.width) {
     chanchito.x = canvas.width - chanchito.ancho;
   }
