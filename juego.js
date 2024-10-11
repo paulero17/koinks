@@ -5,6 +5,7 @@ let puntos = 0;
 let velocidad = 6;
 let salto = 20;
 let gravedad = 1;
+let velocidadChanchito = 2;
 
 // Inicializa el juego
 function init() {
@@ -15,7 +16,7 @@ function init() {
     y: canvas.height - 50,
     ancho: 30,
     alto: 30,
-    velocidadX: 0,
+    velocidadX: velocidadChanchito,
     velocidadY: 0
   };
   
@@ -27,7 +28,8 @@ function init() {
       x: canvas.width,
       y: Math.random() * (canvas.height - 20),
       ancho: 10,
-      alto: 10
+      alto: 10,
+      velocidadX: -velocidad
     });
   }, 1000);
 }
@@ -55,7 +57,7 @@ function actualizar() {
     ctx.fillRect(monedas[i].x, monedas[i].y, monedas[i].ancho, monedas[i].alto);
     
     // Mueve las monedas
-    monedas[i].x -= velocidad;
+    monedas[i].x += monedas[i].velocidadX;
     
     // Comprueba si el chanchito ha recogido la moneda
     if (chanchito.x + chanchito.ancho > monedas[i].x &&
