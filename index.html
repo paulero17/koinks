@@ -1,27 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Juego del Chanchito</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chanchito Collector</title>
     <style>
-        body {
-            text-align: center;
-        }
-        #game {
-            width: 400px;
-            height: 300px;
+        canvas {
             border: 1px solid black;
-            position: relative;
-        }
-        #chanchito, #moneda {
-            position: absolute;
+            background-color: #f0f0f0;
         }
     </style>
 </head>
 <body>
-    <div id="game">
-        <img id="chanchito" src="img/chanchito.png" alt="Chanchito">
-        <img id="moneda" src="img/moneda.png" alt="Moneda">
-    </div>
-    <script src="script.js"></script>
+    <canvas id="gameCanvas" width="400" height="300"></canvas>
+    <script src="game.js"></script>
 </body>
 </html>
+
+
+
