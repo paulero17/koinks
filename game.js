@@ -9,16 +9,18 @@ let isJumping = false;
 
 // Generar una nueva moneda en una posición aleatoria
 function spawnCoin() {
-    const y = Math.random() * (canvas.height - 20); // Posición Vertical Aleatoria
-    coins.push({ x: canvas.width, y: y, width: 20, height: 20 });
+    const y = Math.random() * (canvas.height - 20);  // Posición vertical aleatoria
+    coins.push({ x: canvas.width, y: y, width: 20, height: 20 }); // Aparecen en el lado derecho de la pantalla
 }
 
 // Actualizar la posición de las monedas
 function updateCoins() {
     for (let i = 0; i < coins.length; i++) {
-        coins[i].x -= 2; // Velocidad de movimiento hacia la izquierda
-        if (coins[i].x < 0) {
-            coins.splice(i, 1); // Eliminar moneda si sale de pantalla
+        coins[i].x -= 2; // Movimiento hacia la izquierda
+
+        // Eliminar moneda si sale de pantalla
+        if (coins[i].x + coins[i].width < 0) {
+            coins.splice(i, 1);
             i--;
         }
     }
@@ -90,3 +92,4 @@ setInterval(spawnCoin, 1000);
 
 // Iniciar el juego
 update();
+
