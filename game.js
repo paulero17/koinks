@@ -9,7 +9,7 @@ let isJumping = false;
 
 // Generar una nueva moneda en una posición aleatoria
 function spawnCoin() {
-    const y = Math.random() * (canvas.height - 20);  // Posición vertical aleatoria
+    const y = Math.random() * (canvas.height - 200);  // Posición vertical aleatoria
     coins.push({ x: canvas.width, y: y, width: 20, height: 20 }); // Aparecen en el lado derecho de la pantalla
 }
 
@@ -81,7 +81,7 @@ function update() {
 
 // Control de salto
 window.addEventListener('keydown', (e) => {
-    if (e.code === 'Space' && pig.y === 250) {
+    if (e.code === 'Space' && pig.y === 500) {
         pig.dy = -15; // Inicializa el salto
         isJumping = true;
     }
