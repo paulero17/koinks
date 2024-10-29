@@ -102,6 +102,12 @@ window.addEventListener('touchstart', (e) => {
     e.preventDefault();
 });
 
+// Evitar que aparezca el menú "copiar" al hacer doble clic en dispositivos móviles
+window.addEventListener('dblclick', (e) => {
+    e.preventDefault();
+});
+
+
 // Spawnear monedas cada 1 segundo
 setInterval(spawnCoin, 1000);
 
