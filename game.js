@@ -6,6 +6,7 @@ let coins = [];
 let score = 0;
 let gravity = 1;
 let isJumping = false;
+let jumpCount = 0;  // Contador de saltos
 
 // Generar una nueva moneda en una posición aleatoria
 function spawnCoin() {
@@ -68,6 +69,7 @@ function update() {
             pig.y = 250;
             pig.dy = 0;
             isJumping = false;
+            jumpCount = 0;  // Reinicia el contador al tocar el suelo
         }
     }
     
@@ -80,9 +82,10 @@ function update() {
 
 // Función de salto
 function jump() {
-    if (pig.y === 250) {
+    if (jumpCount < 2) { // Permitir un máximo de 2 saltos
         pig.dy = -15;
         isJumping = true;
+        jumpCount++;  // Incrementa el contador de saltos
     }
 }
 
@@ -96,7 +99,7 @@ window.addEventListener('keydown', (e) => {
 // Control de salto para pantallas táctiles
 window.addEventListener('touchstart', (e) => {
     jump();
-    e.preventDefault(); // Evita que la pantalla se desplace al tocar
+    e.preventDefault();
 });
 
 // Spawnear monedas cada 1 segundo
