@@ -9,16 +9,15 @@ let isJumping = false;
 
 // Generar una nueva moneda en una posición aleatoria
 function spawnCoin() {
-    const y = Math.random() * (canvas.height - 100);  // Posición vertical aleatoria
-    coins.push({ x: canvas.width, y: y, width: 20, height: 20 }); // Aparecen en el lado derecho de la pantalla
+    const y = Math.random() * (canvas.height - 100);
+    coins.push({ x: canvas.width, y: y, width: 20, height: 20 });
 }
 
 // Actualizar la posición de las monedas
 function updateCoins() {
     for (let i = 0; i < coins.length; i++) {
-        coins[i].x -= 2; // Movimiento hacia la izquierda
+        coins[i].x -= 2;
 
-        // Eliminar moneda si sale de pantalla
         if (coins[i].x + coins[i].width < 0) {
             coins.splice(i, 1);
             i--;
@@ -34,7 +33,7 @@ function detectCollisions() {
             pig.y < coins[i].y + coins[i].height &&
             pig.y + pig.height > coins[i].y) {
             score++;
-            coins.splice(i, 1); // Eliminar moneda al recoger
+            coins.splice(i, 1);
             i--;
         }
     }
@@ -79,12 +78,25 @@ function update() {
     requestAnimationFrame(update);
 }
 
-// Control de salto
-window.addEventListener('keydown', (e) => {
-    if (e.code === 'Space' && pig.y === 250) {
-        pig.dy = -15; // Inicializa el salto
+// Función de salto
+function jump() {
+    if (pig.y === 250) {
+        pig.dy = -15;
         isJumping = true;
     }
+}
+
+// Control de salto para teclado
+window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') {
+        jump();
+    }
+});
+
+// Control de salto para pantallas táctiles
+window.addEventListener('touchstart', (e) => {
+    jump();
+    e.preventDefault(); // Evita que la pantalla se desplace al tocar
 });
 
 // Spawnear monedas cada 1 segundo
