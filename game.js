@@ -3,15 +3,22 @@ const ctx = canvas.getContext('2d');
 
 let pig = { x: 50, y: 250, width: 30, height: 30, dy: 0 };
 let coins = [];
+let bombs = [];  // Array para las bombas
 let score = 0;
 let gravity = 1;
 let isJumping = false;
-let jumpCount = 0;  // Contador de saltos
+let jumpCount = 0;
 
 // Generar una nueva moneda en una posición aleatoria
 function spawnCoin() {
     const y = Math.random() * (canvas.height - 100);
     coins.push({ x: canvas.width, y: y, width: 20, height: 20 });
+}
+
+// Generar una nueva bomba en una posición aleatoria
+function spawnBomb() {
+    const y = Math.random() * (canvas.height - 100);
+    bombs.push({ x: canvas.width, y: y, width: 30, height: 30 });
 }
 
 // Actualizar la posición de las monedas
@@ -26,8 +33,21 @@ function updateCoins() {
     }
 }
 
-// Detectar colisiones
+// Actualizar la posición de las bombas
+function updateBombs() {
+    for (let i = 0; i < bombs.length; i++) {
+        bombs[i].x -= 2;
+
+        if (bombs[i].x + bombs[i].width < 0) {
+            bombs.splice(i, 1);
+            i--;
+        }
+    }
+}
+
+// Detectar colisiones con monedas y bombas
 function detectCollisions() {
+    // Colisiones con monedas
     for (let i = 0; i < coins.length; i++) {
         if (pig.x < coins[i].x + coins[i].width &&
             pig.x + pig.width > coins[i].x &&
@@ -38,9 +58,19 @@ function detectCollisions() {
             i--;
         }
     }
+    // Colisiones con bombas
+    for (let i = 0; i < bombs.length; i++) {
+        if (pig.x < bombs[i].x + bombs[i].width &&
+            pig.x + pig.width > bombs[i].x &&
+            pig.y < bombs[i].y + bombs[i].height &&
+            pig.y + pig.height > bombs[i].y) {
+            resetGame(); // Llamada a la función que reinicia el juego
+            break;
+        }
+    }
 }
 
-// Dibuja el chanchito y las monedas
+// Dibuja el chanchito, monedas, y bombas
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
@@ -54,9 +84,26 @@ function draw() {
         ctx.fillRect(coin.x, coin.y, coin.width, coin.height);
     }
     
+    // Dibujar bombas
+    ctx.fillStyle = 'red';
+    for (let bomb of bombs) {
+        ctx.fillRect(bomb.x, bomb.y, bomb.width, bomb.height);
+    }
+    
     // Dibujar puntaje
     ctx.fillStyle = 'black';
     ctx.fillText('Score: ' + score, 10, 10);
+}
+
+// Reiniciar el juego
+function resetGame() {
+    pig.y = 250;
+    pig.dy = 0;
+    score = 0;
+    coins = [];
+    bombs = [];
+    jumpCount = 0;
+    isJumping = false;
 }
 
 // Actualizar el estado del juego
@@ -69,11 +116,12 @@ function update() {
             pig.y = 250;
             pig.dy = 0;
             isJumping = false;
-            jumpCount = 0;  // Reinicia el contador al tocar el suelo
+            jumpCount = 0;
         }
     }
     
     updateCoins();
+    updateBombs();
     detectCollisions();
     draw();
     
@@ -82,10 +130,10 @@ function update() {
 
 // Función de salto
 function jump() {
-    if (jumpCount < 2) { // Permitir un máximo de 2 saltos
+    if (jumpCount < 2) {
         pig.dy = -15;
         isJumping = true;
-        jumpCount++;  // Incrementa el contador de saltos
+        jumpCount++;
     }
 }
 
@@ -107,10 +155,13 @@ window.addEventListener('dblclick', (e) => {
     e.preventDefault();
 });
 
-
 // Spawnear monedas cada 1 segundo
 setInterval(spawnCoin, 1000);
 
+// Spawnear bombas cada 3 segundos
+setInterval(spawnBomb, 3000);
+
 // Iniciar el juego
 update();
+
 
